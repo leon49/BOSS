@@ -1,21 +1,24 @@
 <template>
   <div id="main">
     <!--固定的顶部-->
+    <div class="main_fixed_top">
+      <div class="job_header clear">
+        <div class="job_header_left">
+         <mt-button>申请提现</mt-button>
+        </div>
+      </div>
+      </div>
     <!--列表-->
     <div class="job_content" id="jobcontent" ref="wrapper">
       <ul class="page-infinite-list job_lists" v-infinite-scroll="loadMore" infinite-scroll-disabled="loading"
           infinite-scroll-distance="50">
         <li v-for="job in jobs">
           <router-link @click="changeDetialId(job)" :to="{ name: 'detail', params: { jobId: job.id }}">
-            <h4 class="clear">订单号:<span>100001</span>
+            <h4 class="clear">申请金额:<span>100001</span>
             </h4>
-            <h4 class="clear">充值金额:<span>100001</span>
+            <h4 class="clear">处理状态:<span>100001</span>
             </h4>
-            <h4 class="clear">商品名称：<span>100001</span>
-            </h4>
-            <h4 class="clear">下单时间<span>100001</span>
-            </h4>
-            <h4 class="clear">支付状态:<span>100001</span>
+            <h4 class="clear">处理时间：<span>100001</span>
             </h4>
           </router-link>
         </li>
@@ -46,12 +49,6 @@
   *
   **/
   // 推荐子组件
-  import slideTabComp from './slideTabComp.vue'
-  // 城市选择组件
-  import selectCityComp from './selectCityComp.vue'
-  // 公司和要求公用一个子组件
-  import compRequireComp from './compRequireComp.vue'
-
   export default {
     data() {
       return {
