@@ -3,7 +3,7 @@ import fetch from '@/utils/fetch'
 export function queryList() {
 
   return fetch({
-    url: '/agentbiz/queryMyOrderList',
+    url: '/agentbiz/queryRewardList',
     method: 'get'
   })
 

@@ -1,10 +1,16 @@
-export function loginByUsername(name, password) {
-  const data = {
-    goldCount
-  }
+import fetch from '@/utils/fetch'
+
+export function queryList() {
   return fetch({
-    url: '/cash/submitCashApply',
-    method: 'post',
-    data
+    url: '/cash/queryList',
+    method: 'get'
+  })
+
+}
+
+export function submitCashToServer(goldCount) {
+  return fetch({
+    url: '/cash/submitCash?gold='.concat(goldCount),
+    method: 'get'
   })
 }

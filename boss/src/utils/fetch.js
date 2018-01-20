@@ -2,6 +2,7 @@ import axios from 'axios'
 import { MessageBox } from 'mint-ui';
 import { getToken ,removeToken} from './auth'
 
+
 // 创建axios实例
 const service = axios.create({
   baseURL: process.env.BASE_API, // api的base_url
@@ -26,8 +27,8 @@ service.interceptors.request.use(config => {
 service.interceptors.response.use(
   response => {
     const res = response.data
+    debugger
     if (res.code !== 200) {
-      debugger
       MessageBox({
         message: res.message,
         type: 'error',
@@ -35,6 +36,9 @@ service.interceptors.response.use(
       })
       if (res.code === -1) {
           removeToken()
+          router.push({
+            path: "/home"
+          });
           location.reload()// 为了重新实例化vue-router对象 避免bug
       }
       return Promise.reject('error')

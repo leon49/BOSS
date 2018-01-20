@@ -3,21 +3,18 @@
     <!--固定的顶部-->
     <!--列表-->
     <div class="job_content" id="jobcontent" ref="wrapper">
-      <ul class="page-infinite-list job_lists" v-infinite-scroll="loadMore" infinite-scroll-disabled="loading"
+      <ul class="page-infinite-list job_lists"  infinite-scroll-disabled="loading"
           infinite-scroll-distance="50">
-        <li v-for="job in jobs">
-          <router-link @click="changeDetialId(job)" :to="{ name: 'detail', params: { jobId: job.id }}">
-            <h4 class="clear">订单号:<span>100001</span>
+        <li v-for="data in datas">
+            <h4 class="clear">订单号:<span>{{data.orderId}}</span>
             </h4>
-            <h4 class="clear">充值金额:<span>100001</span>
+            <h4 class="clear">充值金额:<span>{{data.money/100}}元</span></h4>
+            <h4 class="clear">商品名称：<span>{{data.title}}</span>
             </h4>
-            <h4 class="clear">商品名称：<span>100001</span>
+            <h4 class="clear">下单时间:<span>{{data.orderTime}}</span>
             </h4>
-            <h4 class="clear">下单时间<span>100001</span>
+            <h4 class="clear">支付状态:<span>{{data.payStatus}}</span>
             </h4>
-            <h4 class="clear">支付状态:<span>100001</span>
-            </h4>
-          </router-link>
         </li>
       </ul>
       <div v-show="loading" class="page-infinite-loading">
@@ -51,7 +48,7 @@
   import selectCityComp from './selectCityComp.vue'
   // 公司和要求公用一个子组件
   import compRequireComp from './compRequireComp.vue'
-
+  import {queryList} from '@/api/order'
   export default {
     data() {
       return {
@@ -72,7 +69,7 @@
         timer: null,
         mainscroll: null,
         apiUrl: "",
-        jobs: [],
+        datas: [],
         temp: [],
         jobId: "",
         loading: false,
@@ -140,15 +137,11 @@
         }, 10);
       },
       loadData() {
-        let _this = this;
-        this.$http.get(_this.apiUrl)
-          .then(response => {
-            if (response.data.code == "0") {
-              _this.jobs = response.data.main;
+        let _this = this
+        queryList().then(response => {
+              _this.datas = response.data.data
               // 模擬每次下拉加載的10條假數據
-              _this.temp = response.data.main;
-              // console.log(response.data);
-            }
+              // console.log(response.data)
           })
           .catch(error => {
             console.log(error);
@@ -158,7 +151,6 @@
       loadMore() {
         this.loading = true;
         setTimeout(() => {
-          this.jobs = this.jobs.concat(this.temp);
           this.loading = false;
           // console.log(this.jobs);
         }, 2500);
@@ -196,7 +188,6 @@
       // console.log(this.$refs.wrapper.getBoundingClientRect().top);
     },
     created() {
-      this.initApiUrl();
       this.$nextTick(function () {
         this.loadData();
       });

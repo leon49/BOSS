@@ -8,19 +8,26 @@
         <ul class="clear">
           <li>
             <span>本周新增</span>
-            <span>{{data.addCount}}</span>
+            <span style="font-size: 20px"> {{data.addCount}}</span>
           </li>
           <li>
             <span>我的金币</span>
-            <span>{{data.goldCount}}</span>
+            <span style="font-size: 20px">{{data.goldCount}}</span>
           </li>
           <li>
-            <span>我的卡片</span>
-            <span>{{data.cardCount}}</span>
+            <span>我的房卡</span>
+            <span style="font-size: 20px">{{data.cardCount}}</span>
           </li>
           <li>
             <span>我的钻石</span>
-            <span>{{data.diamondCount}}</span>
+            <span style="font-size: 20px">{{data.diamondCount}}</span>
+          </li>
+
+        </ul>
+        <ul>
+          <li>
+            <span>申请提现 <mt-field  placeholder="请输入金额" v-model="goldCount"></mt-field></span>
+            <mt-button type="default"  @click ="submitCash()">确认提款</mt-button>
           </li>
         </ul>
       </div>
@@ -34,31 +41,44 @@
 
 <script>
   import {queryMy} from '@/api/my'
+  import {submitCashToServer} from '@/api/cash'
 
   export default {
     name: 'hello',
     data() {
       return {
-        msg: 'Welcome to Your Vue.js App',
+        goldCount:'',
         data: {
+          addCount: 0,
           goldCount: 0,
           cardCount: 0,
           diamondCount: 0
         }
       }
     },
-    created(){
-      queryMythen(response => {
-        const data = response.data.data
-        this.data = data
-      })
-    },
   watch:{
 
   }
   ,
   computed:{
-
+    submitCash(){
+      debugger
+      let gold = this.goldCount
+      if(!gold || gold < 0) {
+        MessageBox.alert('输入值错误!')
+        return
+      }
+      submitCashToServer(gold).then(response=>{
+          const  data = response.data.data
+          if(data.succ){
+            _self.$router.push({
+              path: "/cash"
+            });
+          }else{
+            MessageBox.alert(data.message)
+          }
+      })
+    }
   }
   ,
   methods:{
@@ -75,6 +95,10 @@
   created()
   {
 
+    queryMy().then(response => {
+      const data = response.data.data
+      this.data = data
+    })
   }
   }
 </script>
