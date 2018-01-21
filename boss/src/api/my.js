@@ -7,3 +7,11 @@ export function queryMy() {
     method: 'get'
   })
 }
+
+export function updateAgent(alipayAccout,wechartAccount) {
+  return fetch({
+    url: '/agentbiz/updateAgent?alipayAccout='.concat(alipayAccout).
+    concat("&wecharAccount=").concat(wechartAccount),
+    method: 'get'
+  })
+}

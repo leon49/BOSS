@@ -8,19 +8,27 @@
         <ul class="clear">
           <li>
             <span>本周新增</span>
-            <span style="font-size: 20px"> {{data.addCount}}</span>
+            <span style="font-size: 60px"> {{data.addCount}}</span>
           </li>
           <li>
             <span>我的金币</span>
-            <span style="font-size: 20px">{{data.goldCount}}</span>
+            <span style="font-size: 60px">{{data.goldCount}}</span>
           </li>
           <li>
             <span>我的房卡</span>
-            <span style="font-size: 20px">{{data.cardCount}}</span>
+            <span style="font-size: 60px">{{data.cardCount}}</span>
           </li>
           <li>
             <span>我的钻石</span>
-            <span style="font-size: 20px">{{data.diamondCount}}</span>
+            <span style="font-size: 60px">{{data.diamondCount}}</span>
+          </li>
+          <li>
+            <span>支付宝号</span>
+            <span style="font-size: 60px">{{data.alipayAccout}}</span>
+          </li>
+          <li>
+            <span>微信号</span>
+            <span style="font-size: 60px">{{data.wechartAccout}}</span>
           </li>
 
         </ul>
@@ -28,6 +36,17 @@
           <li>
             <span>申请提现 <mt-field  placeholder="请输入金额" v-model="goldCount"></mt-field></span>
             <mt-button type="default"  @click ="submitCash()">确认提款</mt-button>
+          </li>
+        </ul>
+        <ul>
+          <li>
+            <span>微信号:<mt-field  placeholder="微信号" v-model="waccount"></mt-field></span>
+          </li>
+          <li>
+            <span>支付宝号:<mt-field  placeholder="支付宝号" v-model="aliaccount"></mt-field></span>
+          </li>
+          <li>
+            <mt-button type="default"  @click ="updateAccount()">确认修改</mt-button>
           </li>
         </ul>
       </div>
@@ -41,6 +60,7 @@
 
 <script>
   import {queryMy} from '@/api/my'
+  import {updateAgent} from '@/api/my'
   import {submitCashToServer} from '@/api/cash'
 
   export default {
@@ -48,11 +68,15 @@
     data() {
       return {
         goldCount:'',
+        waccount:'',
+        aliaccount:'',
         data: {
           addCount: 0,
           goldCount: 0,
           cardCount: 0,
-          diamondCount: 0
+          diamondCount: 0,
+          wechartAccout: '',
+          alipayAccout: ''
         }
       }
     },
@@ -61,28 +85,47 @@
   }
   ,
   computed:{
+
+  }
+  ,
+  methods:{
     submitCash(){
-      debugger
       let gold = this.goldCount
       if(!gold || gold < 0) {
         MessageBox.alert('输入值错误!')
         return
       }
       submitCashToServer(gold).then(response=>{
-          const  data = response.data.data
-          if(data.succ){
-            _self.$router.push({
-              path: "/cash"
-            });
-          }else{
-            MessageBox.alert(data.message)
-          }
+        const  data = response.data.data
+        if(data.succ){
+          _self.$router.push({
+            path: "/cash"
+          });
+        }else{
+          alert(data.message)
+        }
+      })
+    },
+    updateAccount(){
+      let _self = this
+      let alipayaccout = this.aliaccount
+      if(alipayaccout === '') {
+        alert('请输入支付宝号！')
+      }
+      let wechartaccout = this.waccount
+      if(wechartaccout === '') {
+        alert('请输入微信号！')
+        return
+      }
+      updateAgent(alipayaccout,wechartaccout).then(response=>{
+        const  data = response.data.data
+        if(data){
+          alert("修改成功")
+        }else{
+          alert('修改失败')
+        }
       })
     }
-  }
-  ,
-  methods:{
-
   }
   ,
   // 創建后挂载到root之后调用该钩子函数

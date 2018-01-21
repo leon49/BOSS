@@ -5,6 +5,7 @@ import App from './App'
 import router from './router'
 import axios from 'axios'
 
+
 // 08-19.1
 // import store from './vuex/store'
 
@@ -16,7 +17,7 @@ import "./styles/base.scss"
 
 
 //其他页面在使用axios的时候直接  this.$http就可以了
-Vue.prototype.$http = axios  
+Vue.prototype.$http = axios
 
 //使用mintUI插件
 import MintUI from 'mint-ui'

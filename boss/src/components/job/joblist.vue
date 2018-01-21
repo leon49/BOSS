@@ -17,6 +17,9 @@
             </h4>
         </li>
       </ul>
+      <span v-if="datas.length == 0" style="text-align:center">
+        暂无任何记录
+      </span>
       <div v-show="loading" class="page-infinite-loading">
         <mt-spinner type="fading-circle"></mt-spinner>
         客官您滑慢点...

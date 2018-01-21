@@ -69,6 +69,11 @@ export default new Router({
           component:login
       },
       {
+        path:'/login',
+        name:"login",
+        component:login
+      },
+      {
           path:'/home',
           component:home,
           mate: { keepAlive: true },
