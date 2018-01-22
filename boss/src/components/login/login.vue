@@ -57,7 +57,7 @@
           if (data.data.succ) {
             setToken(data.data.token)
             _self.$router.push({
-              path: "/home"
+              path: "/reward"
             });
             //console.log(_self.$router);
             //console.log("登录成功");
@@ -65,9 +65,7 @@
             alert("用户名与密码不匹配！")
           }
         });
-
       },
-
     },
     mounted() {
       //加载之前先给一个可以登录的用户

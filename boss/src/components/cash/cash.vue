@@ -1,29 +1,53 @@
 <template>
-  <div id="main">
-    <!--固定的顶部-->
-    <!--列表-->
-    <div class="job_content" id="jobcontent" ref="wrapper">
-      <ul class="page-infinite-list job_lists"  infinite-scroll-disabled="loading"
-          infinite-scroll-distance="50">
-        <li v-for="data in datas">
-          <h4 class="clear">提现金额:<span>{{data.goldCount}}</span>
-          </h4>
-          <h4 class="clear">提现时间:<span>{{data.cashTime}}</span></h4>
-          <h4 class="clear">提现状态：<span>{{data.status}}</span>
-          </h4>
-        </li>
-      </ul>
-      <span v-if="datas.length == 0">
-        暂无任何记录
-      </span>
-      <div v-show="loading" class="page-infinite-loading">
-        <mt-spinner type="fading-circle"></mt-spinner>
-        客官您滑慢点...
+    <div id="main">
+      <!--固定的顶部-->
+      <div class="main_fixed_top">
+        <div class="common_header clear">
+          <div class="common_header_text">
+            <span>提现</span>
+          </div>
+        </div>
+      </div>
+      <div v-if="datas.length != 0" style="margin-bottom: 0.3rem;" >
+        <span style="margin-left:0.5rem;font-size: 0.6rem;color: #666666;">审批列表</span>
+        <span style="font-size: 0.35rem;color: #666666;">(100金币=1元)</span>
+      </div>
+      <!--列表-->
+      <div class="job_content" id="jobcontent" ref="wrapper">
+        <ul class="job_lists"
+            infinite-scroll-distance="50">
+          <li v-for="data in datas"  >
+            <div >
+              <div style="display: inline-block;">
+                <h4 style="font-size: 0.3rem;color: #5C5C5C">提现金额:<p style="color:#2F2F2F;font-size: 1rem">{{data.goldCount}}</p></h4>
+              </div>
+              <div style="display: inline-block;float: right">
+                <h4 class="job_status_text" :class="{ 'job_status_text': data.status=='已通过','job_status_text2':data.status!='已通过' }">{{data.status}}</h4>
+                <h4 style="font-size: 0.3rem;color: #5C5C5C;margin-top: 0.4rem"><span>{{data.cashTime}}</span></h4>
+              </div>
+            </div>
+          </li>
+        </ul>
+
+        <div v-if="datas.length == 0"   >
+          <span style="font-size: 0.7rem;color: #aaaaaa;
+          text-align: center;position: absolute;left: 0rem;
+          top:4.5rem;right:0rem;" >
+            :) 还没提现记录呢
+          </span>
+        </div>
+
+        <div v-show="loading" class="page-infinite-loading">
+          <mt-spinner type="fading-circle"></mt-spinner>
+          客官您滑慢点...
+        </div>
+      </div>
+      <div v-if="datas.length != 0" style="margin-top: 1rem">
+          <router-link  :to="{name : 'inputPage',params:{typeName:'提现金额'}}">
+            <span class="buttonstyle">申请提现</span>
+          </router-link>
       </div>
     </div>
-    <!--返回顶部-->
-    <!-- <img v-show="willshow" @click="gotop" src="/static/images/backTop.png" class="backTop" alt=""> -->
-  </div>
 </template>
 
 <script>

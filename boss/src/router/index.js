@@ -23,7 +23,9 @@ const message = resolve => require(['@/components/message/message'], resolve)
 
 const meschatDetail = resolve => require(['@/components/message/meschatDetail'], resolve)
 
+
 const aboutme = resolve => require(['@/components/aboutme/myinfo'], resolve)
+const inputPage = resolve => require(['@/components/aboutme/inputPage'], resolve)
 
 
 
@@ -79,11 +81,6 @@ export default new Router({
           mate: { keepAlive: true },
           children:[
             {
-              path:'/',
-              name:"joblist",
-              component:joblist
-            },
-            {
               path:'/cash',
               name:"cashlist",
               component:cash
@@ -120,6 +117,11 @@ export default new Router({
         path:"/meschatDetail",
         name:"meschatDetail",
         component:meschatDetail
+      },
+      {
+        path:"/inputPage",
+        name:"inputPage",
+        component:inputPage
       }
   ]
 })

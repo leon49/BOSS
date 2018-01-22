@@ -5,11 +5,9 @@
       </transition>
       <!--组件的应用-->
       <div class="navbar flex_parent">
-        <router-link to="/home" class="flex_child"><span class="icon-earth"></span><span>我的充值</span></router-link>
-        <router-link to="/reward" class="flex_child"><span class="icon-earth"></span><span>我的奖励</span></router-link>
-        <router-link to="/cash" class="flex_child"><span class="icon-message"></span><span>我的提现</span></router-link>
-        <router-link to="/aboutme" class="flex_child"><span class="icon-message"></span><span>我的信息</span></router-link>
-
+        <router-link to="/reward" class="flex_child"><span class="icon-earth"></span><span>任务奖励</span></router-link>
+        <router-link to="/cash" class="flex_child"><span class="icon-message"></span><span>提现</span></router-link>
+        <router-link to="/aboutme" class="flex_child"><span class="icon-message"></span><span>个人信息</span></router-link>
       </div>
     </div>
 </template>

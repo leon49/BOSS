@@ -1,6 +1,6 @@
 @import "../styles/mixin.scss";
 .job_detial{
-    background: #E9EFEF;
+    background: #FFFFFF;
     position: relative;
     padding-top: 1.3rem;
     padding-bottom: 1.5rem;
@@ -16,7 +16,7 @@
     // padding: .3rem 0 .4rem 0;
     .top_detial_bg{
         background: #fff;
-        padding:.25rem .4rem;
+        padding:.4rem .4rem;
         margin-top: .3rem;
         .top_detial{
             h3{
@@ -115,7 +115,7 @@
     top: 50%;
     transform: translateY(-50%);
 }
-// 
+//
 .job_detial_header{
     background: $vuecolor;
     h3{
@@ -260,7 +260,7 @@
         }
     }
 }
-.good_tips  { 
+.good_tips  {
     h3 span{
         color: $red;
     }

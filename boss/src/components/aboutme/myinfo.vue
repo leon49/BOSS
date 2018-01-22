@@ -2,59 +2,77 @@
   <div class="me-info">
     <div class="head">
       <div class="head-t">
-        <div class="clear"><span class="iconfont icon-shezhi pull-right seting"></span></div>
-      </div>
-      <div class="head-b">
-        <ul class="clear">
-          <li>
-            <span>本周新增</span>
-            <span style="font-size: 60px"> {{data.addCount}}</span>
-          </li>
-          <li>
-            <span>我的金币</span>
-            <span style="font-size: 60px">{{data.goldCount}}</span>
-          </li>
-          <li>
-            <span>我的房卡</span>
-            <span style="font-size: 60px">{{data.cardCount}}</span>
-          </li>
-          <li>
-            <span>我的钻石</span>
-            <span style="font-size: 60px">{{data.diamondCount}}</span>
-          </li>
-          <li>
-            <span>支付宝号</span>
-            <span style="font-size: 60px">{{data.alipayAccout}}</span>
-          </li>
-          <li>
-            <span>微信号</span>
-            <span style="font-size: 60px">{{data.wechartAccout}}</span>
-          </li>
-
-        </ul>
-        <ul>
-          <li>
-            <span>申请提现 <mt-field  placeholder="请输入金额" v-model="goldCount"></mt-field></span>
-            <mt-button type="default"  @click ="submitCash()">确认提款</mt-button>
-          </li>
-        </ul>
-        <ul>
-          <li>
-            <span>微信号:<mt-field  placeholder="微信号" v-model="waccount"></mt-field></span>
-          </li>
-          <li>
-            <span>支付宝号:<mt-field  placeholder="支付宝号" v-model="aliaccount"></mt-field></span>
-          </li>
-          <li>
-            <mt-button type="default"  @click ="updateAccount()">确认修改</mt-button>
-          </li>
-        </ul>
+        <div class="clear"><span class="iconfont pull-right seting"></span></div>
+        <div class="my-info clear">
+          <div class="my-m">
+            <span>{{data.guid}}</span>
+            <span>{{data.accountLevel}}</span>
+          </div>
+        </div>
       </div>
     </div>
+    <div class="head">
+        <div class="head-b">
+          <ul class="clear">
+            <li>
+              <span class="info-title-text">我的金币</span>
+              <span class="info-text">{{data.goldCount}}</span>
+            </li>
+            <li>
+              <span class="info-title-text">我的房卡</span>
+              <span class="info-text">{{data.cardCount}}</span>
+            </li>
+            <li>
+              <span class="info-title-text">我的钻石</span>
+              <span class="info-text">{{data.diamondCount}}</span>
+            </li>
+            <li>
+              <div v-if="data.alipayAccout===''" >
+                <span class="info-title-text">支付宝号 *</span>
+                <div style="margin-top: 0.65rem">
+                  <router-link :to="{name : 'inputPage',params:{typeName:'支付宝号',otherContent:data.wechartAccout}}">
+                    <i class="buttonstyle" >去绑定</i>
+                  </router-link>
+                </div>
+              </div>
+              <div v-else >
+                <span class="info-title-text">支付宝号</span>
+                <router-link :to="{name : 'inputPage',params:{typeName:'支付宝号',otherContent:data.wechartAccout}}">
+                  <span class="info-text">{{data.alipayAccout}}</span>
+                </router-link>
+              </div>
+            </li>
+            <li>
+              <div v-if="data.wechartAccout===''" >
+                <span class="info-title-text">微信号 *</span>
+                <div style="margin-top: 0.65rem">
+                  <router-link :to="{name : 'inputPage',params:{typeName:'微信号',otherContent:data.alipayAccout}}">
+                    <i class="buttonstyle" >去绑定</i>
+                  </router-link>
+                </div>
+              </div>
+              <div v-else >
+                <span class="info-title-text">微信号</span>
+                <router-link :to="{name : 'inputPage',params:{typeName:'微信号',otherContent:data.alipayAccout}}">
+                <span class="info-text">{{data.wechartAccout}}</span>
+                </router-link>
+              </div>
+            </li>
 
-    <div class="main">
-
-    </div>
+          </ul>
+          <!--<ul>-->
+            <!--<li>-->
+              <!--<span>微信号:<mt-field  placeholder="微信号" v-model="waccount"></mt-field></span>-->
+            <!--</li>-->
+            <!--<li>-->
+              <!--<span>支付宝号:<mt-field  placeholder="支付宝号" v-model="aliaccount"></mt-field></span>-->
+            <!--</li>-->
+            <!--<li>-->
+              <!--<mt-button type="default"  @click ="updateAccount()">确认修改</mt-button>-->
+            <!--</li>-->
+          <!--</ul>-->
+        </div>
+      </div>
   </div>
 </template>
 
@@ -76,8 +94,11 @@
           cardCount: 0,
           diamondCount: 0,
           wechartAccout: '',
-          alipayAccout: ''
-        }
+          alipayAccout: '',
+          guid:'',
+          accountLevel:'',
+        },
+        testData:''
       }
     },
   watch:{
@@ -89,43 +110,26 @@
   }
   ,
   methods:{
-    submitCash(){
-      let gold = this.goldCount
-      if(!gold || gold < 0) {
-        MessageBox.alert('输入值错误!')
-        return
-      }
-      submitCashToServer(gold).then(response=>{
-        const  data = response.data.data
-        if(data.succ){
-          _self.$router.push({
-            path: "/cash"
-          });
-        }else{
-          alert(data.message)
-        }
-      })
-    },
-    updateAccount(){
-      let _self = this
-      let alipayaccout = this.aliaccount
-      if(alipayaccout === '') {
-        alert('请输入支付宝号！')
-      }
-      let wechartaccout = this.waccount
-      if(wechartaccout === '') {
-        alert('请输入微信号！')
-        return
-      }
-      updateAgent(alipayaccout,wechartaccout).then(response=>{
-        const  data = response.data.data
-        if(data){
-          alert("修改成功")
-        }else{
-          alert('修改失败')
-        }
-      })
-    }
+    // updateAccount(){
+    //   let _self = this
+    //   let alipayaccout = this.aliaccount
+    //   if(alipayaccout === '') {
+    //     alert('请输入支付宝号！')
+    //   }
+    //   let wechartaccout = this.waccount
+    //   if(wechartaccout === '') {
+    //     alert('请输入微信号！')
+    //     return
+    //   }
+    //   updateAgent(alipayaccout,wechartaccout).then(response=>{
+    //     const  data = response.data.data
+    //     if(data){
+    //       alert("修改成功")
+    //     }else{
+    //       alert('修改失败')
+    //     }
+    //   })
+    // }
   }
   ,
   // 創建后挂载到root之后调用该钩子函数
@@ -141,6 +145,15 @@
     queryMy().then(response => {
       const data = response.data.data
       this.data = data
+      if (!this.data.accountLevel){
+        this.data.accountLevel = '默认代理交款金额'
+      }
+      if (!this.data.guid){
+        this.data.guid = '默认GUID'
+      }
+
+      // this.data.wechartAccout = ''
+      // this.data.alipayAccout=''
     })
   }
   }
@@ -157,7 +170,7 @@
 
   .head {
     .head-t {
-      height: 4rem;
+      height: 3rem;
       background: #53CAC3;
       .seting {
         padding: 10px;
@@ -166,7 +179,7 @@
         font-weight: bold;
       }
       .my-info {
-        margin: 0.533333rem 0.466666rem 0 0.333333rem;
+        margin: 0.333333rem 0.466666rem 0 0.333333rem;
         height: 1.733333rem;
         color: #fff;
         font-weight: normal;
@@ -181,7 +194,7 @@
             display: block;
           }
           span:nth-child(1) {
-            font-size: 0.4rem;
+            font-size: 0.5rem;
           }
         }
         .my-r {
@@ -200,6 +213,8 @@
     }
     .head-b {
       background: #fff;
+      padding-top: 0.4rem;
+      padding-bottom: 1rem;
       ul {
         list-style: none;
         li {
@@ -210,13 +225,13 @@
           span {
             display: block;
           }
-          span:nth-child(1) {
-            font-weight: bold;
-            font-size: 0.5rem;
-          }
-          span:nth-child(2) {
-            color: #B3B3B3;
-          }
+          /*span:nth-child(1) {*/
+            /*font-weight: bold;*/
+            /*font-size: 0.5rem;*/
+          /*}*/
+          /*span:nth-child(2) {*/
+            /*color: #B3B3B3;*/
+          /*}*/
 
         }
       }
@@ -249,7 +264,23 @@
       }
     }
   }
-
+  .buttonstyle{
+    font-size: 0.4rem;
+    font-style: normal;
+    color: #81b9b4;
+    background: #ebfbfa;
+    border-radius: 0.3rem;
+    padding: 0.3rem;
+  }
+  .info-title-text{
+    color:#555555;
+    font-size: 0.5rem;
+  }
+  .info-text{
+    margin-top: 0.5rem;
+    color: rgba(75, 123, 110, 0.95);
+    font-size: 0.65rem;
+  }
   .bottom {
     a {
       color: #333;

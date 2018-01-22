@@ -1,27 +1,57 @@
 <template>
   <div id="main">
     <!--固定的顶部-->
+    <div class="main_fixed_top">
+      <div class="common_header clear">
+        <div class="common_header_text">
+          <span>任务奖励</span>
+        </div>
+      </div>
+    </div>
+    <div v-if="datas.length != 0"  style="margin-bottom: 0.3rem" >
+      <span style="margin-left:0.5rem;font-size: 0.6rem;color: #666666;">消费房卡奖</span>
+    </div>
     <!--列表-->
     <div class="job_content" id="jobcontent" ref="wrapper">
-      <ul class="page-infinite-list job_lists"  infinite-scroll-disabled="loading"
-          infinite-scroll-distance="50">
-        <li v-for="data in datas">
+      <!--<ul class="page-infinite-list job_lists"  infinite-scroll-disabled="loading"-->
+          <!--infinite-scroll-distance="50">-->
+        <!--<li v-for="data in datas">-->
+          <!--<h4 class="clear">奖励金币:<span>{{data.reward}}</span></h4>-->
+          <!--<h4 class="clear">奖励时间:<span>{{data.rewardTime}}</span>-->
+          <!--</h4>-->
+        <!--</li>-->
+      <!--</ul>-->
 
-          <h4 class="clear">奖励金币:<span>{{data.reward}}</span></h4>
-          <h4 class="clear">奖励时间:<span>{{data.rewardTime}}</span>
-          </h4>
+      <ul class="job_lists"
+          infinite-scroll-distance="50">
+        <li v-for="data in datas"  >
+          <div >
+            <div style="display: inline-block;">
+              <h4 style="font-size: 0.3rem;color: #5C5C5C">任务金额:<p style="color:#2F2F2F;font-size: 1rem">{{data.reward}}</p></h4>
+            </div>
+            <div style="display: inline-block;float: right">
+              <h4 style="text-align:right;font-size: 0.5rem;color: #5C5C5C;margin-top: 0.1rem"><span>{{data.date}}</span></h4>
+              <h4 style="text-align:right;font-size: 0.35rem;color: #8D8D8D;margin-top: 0.2rem"><span>{{data.time}}</span></h4>
+            </div>
+          </div>
         </li>
       </ul>
-      <span v-if="datas.length == 0">
-        暂无任何记录
-      </span>
+
+      <div v-if="datas.length == 0"   >
+        <span style="font-size: 0.7rem;color: #aaaaaa;
+        text-align: center;position: absolute;left: 0rem;
+        top:4.5rem;right:0rem;" >
+          :) 还没记录呢<p style="margin-top: 0.5rem;font-size: 0.4rem">您还没消费过房卡</p>
+        </span>
+      </div>
+
       <div v-show="loading" class="page-infinite-loading">
         <mt-spinner type="fading-circle"></mt-spinner>
         客官您滑慢点...
       </div>
     </div>
     <!--返回顶部-->
-    <!-- <img v-show="willshow" @click="gotop" src="/static/images/backTop.png" class="backTop" alt=""> -->
+     <img v-show="willshow" @click="gotop" src="/static/images/backTop.png" class="backTop" alt="">
   </div>
 </template>
 
@@ -133,6 +163,14 @@
         let _this = this
         queryList().then(response => {
           _this.datas = response.data.data
+
+          for (let i = 0; i<_this.datas.length;i++){
+            var tmpStr = _this.datas[i].rewardTime;
+            console.log(tmpStr);
+            var strAry = tmpStr.split(" ");
+            _this.datas[i].date = strAry[0];
+            _this.datas[i].time = strAry[1];
+          }
           // 模擬每次下拉加載的10條假數據
           // console.log(response.data)
         })
