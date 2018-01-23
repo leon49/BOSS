@@ -5,8 +5,13 @@
         <div class="clear"><span class="iconfont pull-right seting"></span></div>
         <div class="my-info clear">
           <div class="my-m">
-            <span>{{data.guid}}</span>
-            <span>{{data.accountLevel}}</span>
+            <span>用户ID:{{data.guid}}</span>
+            <span>等级:<a style="font-weight: bold">{{userLevel}}</a></span>
+            <div style="position: absolute;right: 1rem;top: 1.5rem;">
+              <router-link :to="{name:'setPwd'}">
+                <u style="font-size: 0.4rem;color: #446644;text-decoration: underline;">修改密码</u>
+              </router-link>
+            </div>
           </div>
         </div>
       </div>
@@ -15,20 +20,20 @@
         <div class="head-b">
           <ul class="clear">
             <li>
-              <span class="info-title-text">我的金币</span>
+              <span class="info-title-text">金币</span>
               <span class="info-text">{{data.goldCount}}</span>
             </li>
             <li>
-              <span class="info-title-text">我的房卡</span>
+              <span class="info-title-text">房卡</span>
               <span class="info-text">{{data.cardCount}}</span>
             </li>
             <li>
-              <span class="info-title-text">我的钻石</span>
+              <span class="info-title-text">钻石</span>
               <span class="info-text">{{data.diamondCount}}</span>
             </li>
             <li>
               <div v-if="data.alipayAccout===''" >
-                <span class="info-title-text">支付宝号 *</span>
+                <span class="info-title-text">支付宝 *</span>
                 <div style="margin-top: 0.65rem">
                   <router-link :to="{name : 'inputPage',params:{typeName:'支付宝号',otherContent:data.wechartAccout}}">
                     <i class="buttonstyle" >去绑定</i>
@@ -36,7 +41,7 @@
                 </div>
               </div>
               <div v-else >
-                <span class="info-title-text">支付宝号</span>
+                <span class="info-title-text">支付宝</span>
                 <router-link :to="{name : 'inputPage',params:{typeName:'支付宝号',otherContent:data.wechartAccout}}">
                   <span class="info-text">{{data.alipayAccout}}</span>
                 </router-link>
@@ -96,8 +101,9 @@
           wechartAccout: '',
           alipayAccout: '',
           guid:'',
-          accountLevel:'',
+          level:''
         },
+        userLevel:'',
         testData:''
       }
     },
@@ -145,9 +151,13 @@
     queryMy().then(response => {
       const data = response.data.data
       this.data = data
-      if (!this.data.accountLevel){
-        this.data.accountLevel = '默认代理交款金额'
+      if (!this.data.level){
+        this.data.level = '1'
       }
+
+      var levelStr = ["默认","普通","高级","钻石"];
+      this.userLevel = levelStr[this.data.level];
+
       if (!this.data.guid){
         this.data.guid = '默认GUID'
       }
@@ -194,7 +204,7 @@
             display: block;
           }
           span:nth-child(1) {
-            font-size: 0.5rem;
+            font-size: 0.6rem;
           }
         }
         .my-r {

@@ -1,7 +1,10 @@
 <template>
   <div class="job_detial">
     <div class="job_detial_header">
-      <router-link to="/aboutme" class="flex_child"><span class="icon-left"></span></router-link>
+      <div style="margin-top:0.2rem;margin-left: 0.2rem">
+      <span  @click.prevent="jumpBack" class="icon-left" style="color: #fff;font-size: 0.7rem;text-align: center;"></span>
+      </div>
+
       <div class="sub-page-top-text">
         <span>输入{{typeName}}</span>
       </div>
@@ -20,6 +23,7 @@
   import {updateAgent} from '@/api/my'
   import {submitCashToServer} from '@/api/cash'
 
+
   export default {
     data() {
       return {
@@ -35,10 +39,11 @@
         switch (this.typeName){
           case "提现金额":{
             let gold = _self.content
-            if(!gold || gold < 0) {
-              alert('输入值错误!')
+            if(gold<10000) {
+              alert('最低提现值为10000')
               return
             }
+
             submitCashToServer(gold).then(response=>{
               const  data = response.data.data
               if(data.succ){
@@ -92,6 +97,13 @@
         }
 
       },
+      jumpBack(){
+        if( this.typeName == '提现金额' ){
+          this.$router.push({name : 'cashlist'});
+        }else {
+          this.$router.push({name : 'me'});
+        }
+      },
       fecthIndex(){
         this.typeName=this.$route.params.typeName;
         this.otherContent = this.$route.params.otherContent;
@@ -99,6 +111,8 @@
     },
     created(){
       this.fecthIndex()
+
+
     },
 
   }

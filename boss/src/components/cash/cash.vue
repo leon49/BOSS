@@ -11,6 +11,7 @@
       <div v-if="datas.length != 0" style="margin-bottom: 0.3rem;" >
         <span style="margin-left:0.5rem;font-size: 0.6rem;color: #666666;">审批列表</span>
         <span style="font-size: 0.35rem;color: #666666;">(100金币=1元)</span>
+        <span @click.prevent="jumpToTakeMoney" class="buttonCashStyle">申请提现</span>
       </div>
       <!--列表-->
       <div class="job_content" id="jobcontent" ref="wrapper">
@@ -42,11 +43,6 @@
           客官您滑慢点...
         </div>
       </div>
-      <div v-if="datas.length != 0" style="margin-top: 1rem">
-          <router-link  :to="{name : 'inputPage',params:{typeName:'提现金额'}}">
-            <span class="buttonstyle">申请提现</span>
-          </router-link>
-      </div>
     </div>
 </template>
 
@@ -67,6 +63,8 @@
   **/
   // 推荐子组件
   import {queryList} from '@/api/cash'
+  import {queryMy} from '@/api/my'
+
   export default {
     data() {
       return {
@@ -92,7 +90,17 @@
         jobId: "",
         loading: false,
         allLoaded: false,
-        wrapperHeight: 0
+        wrapperHeight: 0,
+        data: {
+          addCount: 0,
+          goldCount: 0,
+          cardCount: 0,
+          diamondCount: 0,
+          wechartAccout: '',
+          alipayAccout: '',
+          guid:'',
+          level:''
+        },
       }
     },
     components: {
@@ -158,6 +166,8 @@
         let _this = this
         queryList().then(response => {
           _this.datas = response.data.data
+
+          // _this.datas = "{{goldCount:10,status=\"已经通过\",cashTime=\"2011 2\"},{goldCount:10,status=\"已经通过\",cashTime=\"2011 2\"},{goldCount:10,status=\"已经通过\",cashTime=\"2011 2\"},{goldCount:10,status=\"已经通过\",cashTime=\"2011 2\"},{goldCount:10,status=\"已经通过\",cashTime=\"2011 2\"},{goldCount:10,status=\"已经通过\",cashTime=\"2011 2\"},{goldCount:10,status=\"已经通过\",cashTime=\"2011 2\"}}";
           // 模擬每次下拉加載的10條假數據
           // console.log(response.data)
         })
@@ -196,8 +206,16 @@
         container.removeEventListener("touchmove", function (event) {
           event.preventDefault();
         }, false);
+      },
+      jumpToTakeMoney(){
+        var _self = this;
+        if( _self.data.alipayAccout==''
+          && _self.data.wechartAccout==''){
+            alert('请绑定微信号或者支付宝')
+          }else{
+            _self.$router.push({name : 'inputPage',params:{typeName:'提现金额'}});
+          }
       }
-
     },
     mounted() {
       // 去掉范湖底部事件监听
@@ -209,6 +227,11 @@
       this.$nextTick(function () {
         this.loadData();
       });
+
+      queryMy().then(response => {
+        const data = response.data.data
+        this.data = data
+      });
     }
   }
 
@@ -216,4 +239,21 @@
 
 <style lang="scss" scoped>
   @import "../../styles/main.scss";
+
+  .buttonCashStyle{
+    position: absolute;
+    right: 0.3rem;
+
+    text-align: center;
+    font-weight: bold;
+    font-size: 0.4rem;
+    font-style: normal;
+
+    padding: 0.15rem 0.2rem 0.15rem 0.2rem;
+
+    color: #81b9b4;
+    background: #ebfbfa;
+    border-radius: 0.3rem;
+  }
 </style>
+

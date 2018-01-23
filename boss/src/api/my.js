@@ -15,3 +15,6 @@ export function updateAgent(alipayAccout,wechartAccount) {
     method: 'get'
   })
 }
+
+
+

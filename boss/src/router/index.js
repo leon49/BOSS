@@ -26,6 +26,7 @@ const meschatDetail = resolve => require(['@/components/message/meschatDetail'],
 
 const aboutme = resolve => require(['@/components/aboutme/myinfo'], resolve)
 const inputPage = resolve => require(['@/components/aboutme/inputPage'], resolve)
+const setPwd = resolve => require(['@/components/aboutme/setPwd'], resolve)
 
 
 
@@ -122,6 +123,11 @@ export default new Router({
         path:"/inputPage",
         name:"inputPage",
         component:inputPage
+      },
+      {
+        path:"/setPwd",
+        name:"setPwd",
+        component:setPwd
       }
   ]
 })
